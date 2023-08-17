@@ -14,6 +14,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -189,5 +191,41 @@ public class UsuarioServiceImplTest {
 
         // Verificación de interacciones con el mock
         verify(usuarioRepository, times(1)).deleteById(idUsuarioExistente);
+    }
+
+     @Test
+    public void testListarUsuarios() {
+        // Datos de entrada
+        Usuario usuario1 = new Usuario(1L, "Nombre1", "Apellido1", "username1", "email1@example.com");
+        Usuario usuario2 = new Usuario(2L, "Nombre2", "Apellido2", "username2", "email2@example.com");
+        List<Usuario> usuarios = new ArrayList<>();
+        usuarios.add(usuario1);
+        usuarios.add(usuario2);
+
+        // Configuración del mock
+        when(usuarioRepository.findAll()).thenReturn(usuarios);
+
+        // Ejecución del método
+        List<UsuarioDTO> usuariosDTO = usuarioService.listarUsuarios();
+
+        // Verificación
+        assertEquals(2, usuariosDTO.size());
+
+        UsuarioDTO usuarioDTO1 = usuariosDTO.get(0);
+        assertEquals(usuario1.getId(), usuarioDTO1.getId());
+        assertEquals(usuario1.getNombre(), usuarioDTO1.getNombre());
+        assertEquals(usuario1.getApellido(), usuarioDTO1.getApellido());
+        assertEquals(usuario1.getUsername(), usuarioDTO1.getUsername());
+        assertEquals(usuario1.getEmail(), usuarioDTO1.getEmail());
+
+        UsuarioDTO usuarioDTO2 = usuariosDTO.get(1);
+        assertEquals(usuario2.getId(), usuarioDTO2.getId());
+        assertEquals(usuario2.getNombre(), usuarioDTO2.getNombre());
+        assertEquals(usuario2.getApellido(), usuarioDTO2.getApellido());
+        assertEquals(usuario2.getUsername(), usuarioDTO2.getUsername());
+        assertEquals(usuario2.getEmail(), usuarioDTO2.getEmail());
+
+        // Verificación de interacciones con el mock
+        verify(usuarioRepository, times(1)).findAll();
     }
 }
