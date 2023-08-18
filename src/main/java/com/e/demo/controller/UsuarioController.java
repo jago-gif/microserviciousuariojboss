@@ -21,6 +21,11 @@ public class UsuarioController {
     
     @Autowired
     UsuarioService usuarioService;
+    
+    @GetMapping("/hola")
+    public String hola() {
+    	return "hola";
+    }
 
     @PostMapping("/guardar")
     public ResponseEntity<UsuarioDTO> guardarUsuario(@RequestBody UsuarioDTO usuario) {
